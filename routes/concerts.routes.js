@@ -4,7 +4,7 @@ const router = express.Router();
 const { db } = require('../db.js');
 
 router.route('/concerts').get((req, res) => {
-    console.log(db)
+    // console.log(db)
     res.json(db.concerts)
 });
 

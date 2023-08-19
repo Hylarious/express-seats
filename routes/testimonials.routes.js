@@ -4,7 +4,7 @@ const router = express.Router();
 const { db } = require('../db.js');
 
 router.route('/testimonials').get((req, res) => {
-    console.log(db)
+    // console.log(db)
     res.json(db.testimonials)
 });
 router.route('/testimonials/random').get((req, res) => {

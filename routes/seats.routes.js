@@ -1,10 +1,11 @@
 const randomID = require('@hylarious/package-id')
 const express = require('express');
+
 const router = express.Router();
 const { db } = require('../db.js');
 
 router.route('/seats').get((req, res) => {
-    console.log(db)
+    // console.log(db)
     res.json(db.seats)
 });
 
@@ -18,9 +19,10 @@ router.route('/seats').post((req, res) => {
         res.status(409).json({ message: "The slot is already taken..." }
 )
     } else {
-        const newTestimonial = { id: randomID(5), day, seat, client, email };
-        db.seats.push(newTestimonial);
+        const newSeats = { id: randomID(5), day, seat, client, email };
+        db.seats.push(newSeats);
         res.json(db.seats)
+        req.io.emit('seatsUpdated', db.seats)
     }
 })
 
