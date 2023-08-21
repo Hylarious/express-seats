@@ -1,31 +1,15 @@
-const randomID = require('@hylarious/package-id')
 const express = require('express');
 const router = express.Router();
-const { db } = require('../db.js');
+const ConcertController = require('../controllers/concerts.controller.js')
 
-router.route('/concerts').get((req, res) => {
-    // console.log(db)
-    res.json(db.concerts)
-});
+router.get('/concerts', ConcertController.getAll);
 
-router.route('/concerts/:id').get((req, res) => {
-    res.send(db.concerts.find(concert => concert.id == req.params.id))
-});
+router.get('/concerts/:id', ConcertController.getConById);
 
-router.route('/concerts').post((req, res) => {
-    const { performer, genre, price, day, image } = req.body
-    const newTestimonial = { id: randomID(5), performer, genre, price, day, image };
-    db.concerts.push(newTestimonial);
-    res.json(db.concerts)
-})
+router.post('/concerts', ConcertController.addCon);
 
-router.route('/concerts/:id').put((req, res) => {
-    const { performer, genre, price, day, image } = req.body
-    res.json(db.concerts.map(concert => (concert.id == req.params.id ? { id:concert.id, performer, genre, price, day, image} : concert)))
-})
+router.put('/concerts/:id', ConcertController.editCon);
 
-router.route('/concerts/:id').delete((req, res) => {
-    res.json(db.concerts.filter(concert => concert.id != req.params.id))
-})
+router.delete('/concerts/:id', ConcertController.delete)
 
 module.exports = router;

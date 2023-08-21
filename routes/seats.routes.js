@@ -1,38 +1,15 @@
-const randomID = require('@hylarious/package-id')
 const express = require('express');
-
 const router = express.Router();
-const { db } = require('../db.js');
+const SeatController = require('../controllers/seats.controller')
 
-router.route('/seats').get((req, res) => {
-    // console.log(db)
-    res.json(db.seats)
-});
+router.get('/seats', SeatController.getAll);
 
-router.route('/seats/:id').get((req, res) => {
-    res.send(db.seats.find(seat => seat.id == req.params.id))
-});
+router.get('/seats/:id', SeatController.getSeatById);
 
-router.route('/seats').post((req, res) => {
-    const { day, seat, client, email } = req.body
-    if(db.seats.some(item => item.seat == seat && item.day == day)) {
-        res.status(409).json({ message: "The slot is already taken..." }
-)
-    } else {
-        const newSeats = { id: randomID(5), day, seat, client, email };
-        db.seats.push(newSeats);
-        res.json(db.seats)
-        req.io.emit('seatsUpdated', db.seats)
-    }
-})
+router.post('/seats', SeatController.addSeat);
 
-router.route('/seats/:id').put((req, res) => {
-    const { day, seat, client, email } = req.body
-    res.json(db.seats.map(s => (s.id == req.params.id ? { id:s.id, day, seat, client, email} : s)))
-})
+router.put('/seats/:id', SeatController.editSeat);
 
-router.route('/seats/:id').delete((req, res) => {
-    res.json(db.seats.filter(seat => seat.id != req.params.id))
-})
+router.delete('/seats/:id', SeatController.delete);
 
 module.exports = router;
