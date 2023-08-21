@@ -23,16 +23,16 @@ exports.getSeatById = async (req, res) => {
 exports.addSeat = async (req, res) => {
     try {
       const { day, seat, client, email } = req.body;
-      const seatCheck = await Seat.exist({ day, seat});
+      const seatCheck = await Seat.exists({ day, seat});
       if(seatCheck) {
         res.status(409).json({ message: "The slot is already taken..." })
       } 
       else { 
         const newSeat = new Seat({ day: day, seat: seat, client: client, email: email});
         await newSeat.save();
-        res.json(newSeat);
         const allSeats = await Seat.find()
         req.io.emit('seatsUpdated', allSeats)
+        res.json(newSeat);
       }
     } 
     catch(err) {
