@@ -40,15 +40,15 @@ db.once('open', () => {
 
 db.on('error', err => console.log('Error' + err))
 
-io.on('connection', (socket) =>{
-  console.log('User connected');
-});
-
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, '/client/build/index.html'));
 });
 
+io.on('connection', (socket) =>{
+  console.log('User connected');
+});
 
+module.exports = server;
 
 
 

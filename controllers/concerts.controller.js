@@ -21,6 +21,48 @@ exports.getConById = async (req, res) => {
     };
   };
 
+exports.getConByPerformer = async (req, res) => {
+  try {
+      const performer = req.params.performer;
+      const concerts = await Concert.find({ performer });
+      res.json(concerts);
+  } catch (err) {
+      res.status(500).json({ message: err });
+  }
+};
+
+exports.getConByGenre = async (req, res) => {
+  try {
+      const genre = req.params.genre;
+      const concerts = await Concert.find({ genre });
+      res.json(concerts);
+  } catch (err) {
+      res.status(500).json({ message: err });
+  }
+};
+
+exports.getConByPriceRange = async (req, res) => {
+  try {
+      const { price_min, price_max } = req.params;
+      const concerts = await Concert.find({
+          price: { $gte: parseFloat(price_min), $lte: parseFloat(price_max) }
+      });
+      res.json(concerts);
+  } catch (err) {
+      res.status(500).json({ message: err });
+  }
+};
+
+exports.getConByDay = async (req, res) => {
+  try {
+      const day = req.params.day;
+      const concerts = await Concert.find({ day });
+      res.json(concerts);
+  } catch (err) {
+      res.status(500).json({ message: err });
+  }
+};
+
 exports.addCon = async (req, res) => {
     try {
       const { performer, genre, price, day, image } = req.body;
@@ -61,3 +103,5 @@ exports.editCon = async (req, res) => {
       res.status(505).json({ message: err })
     }
   };
+
+ 
