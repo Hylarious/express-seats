@@ -3,6 +3,7 @@ const cors = require('cors');
 const path = require('path');
 const socket = require('socket.io');
 const mongoose = require('mongoose');
+const helmet = require('helmet');
 
 const app = express();
 const testimonialsRoutes = require('./routes/testimonials.routes.js');
@@ -15,6 +16,7 @@ const server = app.listen(process.env.PORT || 8000, () => {
 
 const io = socket(server);
 
+app.use(helmet());
 app.use(cors());
 app.use(express.urlencoded( { extended: true } ));
 app.use(express.json());
